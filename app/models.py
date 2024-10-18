@@ -1,6 +1,7 @@
 # models.py
 
 from banjo.models import Model, StringField, IntegerField, FloatField, BooleanField
+from fuzzywuzzy import fuzz
 
 class Quotes(Model):
     quote = StringField()
@@ -12,6 +13,9 @@ class Quotes(Model):
     guesses = IntegerField()
     correct = IntegerField()
 
+    MIN_FUZZ_RATIO = 80
+
+
 
     def json_response(self):
             
@@ -20,6 +24,8 @@ class Quotes(Model):
                 'quote': self.quote,
                 'likes': self.likes,
                 'difficulty': self.difficulty,
+                'guesses' : self.guesses,
+                'answer' : self.answer
             }
     
     def json_response_answerless(self):
@@ -27,7 +33,10 @@ class Quotes(Model):
             "id": self.id,
             "quote": self.quote,
             "correct": self.correct,
-            "guesses": self.guesses
+            'difficulty': self.difficulty,
+            'hint' : self.hint,
+            'guesses': self.guesses
+
         }
     
     def json_response_incorrect_guess(self):
@@ -35,6 +44,7 @@ class Quotes(Model):
             {'id': self.id,
             'question': self.quote,
             'guesses': self.guesses,
+            'difficulty': self.difficulty,
             'correct': False}
         )
     
@@ -43,5 +53,22 @@ class Quotes(Model):
             {'id': self.id,
             'question': self.quote,
             'guesses': self.guesses,
+            'difficulty': self.difficulty,
             'correct': True}
         )
+    def check_guess(self, guess):
+
+        self.guesses += 1
+        similarity = fuzz.ratio(guess.lower(), self.answer.lower())
+            
+        if similarity >= self.MIN_FUZZ_RATIO:
+            self.correct+= 1
+            self.save()
+            return True
+        else:
+            self.save()
+            return False
+            
+    def add_hint(self, new_hint):
+            self.hint = new_hint
+            self.save()
