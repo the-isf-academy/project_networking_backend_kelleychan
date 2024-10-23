@@ -100,7 +100,24 @@ def all_categories(args):
 
     return {'categories':category_list}
 
-# @route_get(BASE_URL + 'popularity_leaderboard')
-# def famous_quote(args):
-#     for famous_quotes in Quotes.objects.all():
-#         return {'Quotes':famous_quotes.json_response_answerless()}
+
+@route_get(BASE_URL + 'popularity_leaderboard')
+def famous_quote(args):
+    quote_list = []
+    for quote in Quotes.objects.order_by('-likes'):
+        quote_list.append(quote.json_response_answerless())
+
+    return {'quote_leaderboard':quote_list}
+
+@route_post(BASE_URL + 'replace_quote', args={'id':int, 'new_quote':str, 'new_answer':str, 'new_difficulty':str})
+def quote_change(args):
+    if Quotes.objects.filter(id=args['id']).exists():
+        quote_change = Quotes.objects.get(id=args['id'])
+        quote_change.change_quote(
+            new_quote = args['new_quote'],
+            new_answer = args['new_answer'],
+            new_difficulty = args['new_difficulty']
+        )
+        return {'Replaced_quote': quote_change.json_response()}
+
+

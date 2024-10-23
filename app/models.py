@@ -22,10 +22,11 @@ class Quotes(Model):
             return {
                 'id': self.id,
                 'quote': self.quote,
-                'likes': self.likes,
                 'difficulty': self.difficulty,
-                'guesses' : self.guesses,
-                'answer' : self.answer
+                'answer' : self.answer,
+                'likes': self.likes,
+                'guesses' : self.guesses
+                
             }
     
     def increase_likes(self):
@@ -40,7 +41,8 @@ class Quotes(Model):
             'difficulty': self.difficulty,
             'hint' : self.hint,
             'likes' : self.likes,
-            'guesses': self.guesses
+            'guesses': self.guesses,
+            'correct_percentage': self.correct_percent()
 
         }
     
@@ -73,7 +75,19 @@ class Quotes(Model):
         else:
             self.save()
             return False
+        
             
     def add_hint(self, new_hint):
             self.hint = new_hint
             self.save()
+
+    def change_quote(self, new_quote, new_answer, new_difficulty):
+        self.quote = new_quote
+        self.answer = new_answer
+        self.difficulty = new_difficulty
+        self.save()
+
+    def correct_percent(self):
+        if self.guesses == 0:
+            return 0.0
+        return (self.correct / self.guesses)* 100

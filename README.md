@@ -31,9 +31,6 @@ Planning document:
 | New_quote              | Post        | Quote:str                              | message: "Quote added successfully" id:12                                                                        | Error:"Failed to add quote, please try again."              |
 | guess                  | Post        | id:int guess:str                       | correct:true message: "Correct! the quote is from Romeo and Juliet."                                             | Error:"Quote not found, please try again."                  |
 
-## Intial Contents
-This is the starter code for [Project 0: Animation](http://cs.fablearn.org/courses/cs9/unit00/project). 
-Here's what is included:
 
 - `README.md` You're looking at it, or at least the formatted version. (Click "raw" to see the unformatted version.) Every project has a README explaining what it is.
 - `project.py` When this is run, it should draw your project. (If your project is well-organized, there might not be much code in `project.py`. Instead, it might import functions from other modules.)
