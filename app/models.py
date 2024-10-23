@@ -28,6 +28,10 @@ class Quotes(Model):
                 'answer' : self.answer
             }
     
+    def increase_likes(self):
+        self.likes += 1
+        self.save()
+
     def json_response_answerless(self):
         return {
             "id": self.id,
@@ -35,6 +39,7 @@ class Quotes(Model):
             "correct": self.correct,
             'difficulty': self.difficulty,
             'hint' : self.hint,
+            'likes' : self.likes,
             'guesses': self.guesses
 
         }

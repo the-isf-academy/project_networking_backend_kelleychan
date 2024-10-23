@@ -51,21 +51,56 @@ def all_quotes(args):
 
     return {'quotes':quote_list}
 
-@route_get(BASE_URL + 'difficultychange', args={'difficulty':str})
-def difficultysearch(args):
+@route_get(BASE_URL + 'difficultysearch', args={'difficulty':str})
+def difficultyfinder(args):
    quote_list = []
 
-   for difficultysearch in Quotes.objects.filter(difficulty__contains= args['difficulty']):
-       quote_list.append(difficultysearch.json_response_answerless())
+   for difficultyfinder in Quotes.objects.filter(difficulty__contains= args['difficulty']):
+       quote_list.append(difficultyfinder.json_response_answerless())
     
        return {'quotes':quote_list}
 
    else:
        return {'error': 'no riddle exists'}
 
-@route_post(BASE_URL + 'addhint', args={'id':int, 'new_hint':str})
+@route_post(BASE_URL + 'add_hint', args={'id':int, 'new_hint':str})
 def add_hints(args):
     if Quotes.objects.filter(id=args['id']).exists():
         add_hints = Quotes.objects.get(id=args['id'])
         add_hints.add_hint(args['new_hint'])
         return {'Fortune': add_hints.json_response_answerless()}
+    
+
+@route_get(BASE_URL + 'specificperson', args={'author':str})
+def personsearch(args):
+   quote_list = []
+
+   for personsearch in Quotes.objects.filter(answer__contains= args['author']):
+       quote_list.append(personsearch.json_response_answerless())
+    
+       return {'quotes':quote_list}
+
+   else:
+       return {'error': 'no riddle exists'}
+
+@route_post(BASE_URL + 'like', args={'id':int})
+def increase_likes(args):
+    if Quotes.objects.filter(id=args['id']).exists():
+        increase_likes = Quotes.objects.get(id=args['id'])
+        increase_likes.increase_likes()
+
+        return {'Quotes': increase_likes.json_response_answerless()}
+    
+@route_get(BASE_URL + 'categories')
+def all_categories(args):
+    category_list = ['Athletes,Artists,Movies,Celebrities']
+
+    for category in Quotes.objects.all():
+        category_list.append(category.json_response_answerless())
+
+    return {'categories':category_list}
+
+# @route_get(BASE_URL + 'popularity_leaderboard')
+# def famous_quote(args):
+#     for famous_quotes in Quotes.objects.all():
+#         return {'Quotes':famous_quotes.json_response_answerless()}
