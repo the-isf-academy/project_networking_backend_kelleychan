@@ -52,11 +52,11 @@ def all_quotes(args):
     return {'quotes':quote_list}
 
 @route_get(BASE_URL + 'difficultychange', args={'difficulty':str})
-def searchword(args):
+def difficultysearch(args):
    quote_list = []
 
-   for searchword in Quotes.objects.filter(difficulty__contains= args['difficulty']):
-       quote_list.append(searchword.json_response_answerless())
+   for difficultysearch in Quotes.objects.filter(difficulty__contains= args['difficulty']):
+       quote_list.append(difficultysearch.json_response_answerless())
     
        return {'quotes':quote_list}
 
