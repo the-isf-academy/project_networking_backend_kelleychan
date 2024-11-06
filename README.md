@@ -2,7 +2,8 @@
 
 
 > **Don't forget to edit this `README.md` file**
->
+>Description: In this game, you're given a quote ranging from many categories such as movies, celebrities, athletes, etc. The objective of the game is to guess where or who the quote came from.
+
 > If you're interested in how to format markdown, click [here](https://www.markdownguide.org/basic-syntax/#images-1)
 
 # Unit 0 Project: Animation
