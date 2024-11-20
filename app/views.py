@@ -63,11 +63,11 @@ def difficultyfinder(args):
 
 #Route to add hint
 @route_post(BASE_URL + 'add_hint', args={'id':int, 'new_hint':str})
-def add_hints(args):
+def quote_hints(args):
     if Quotes.objects.filter(id=args['id']).exists():
-        add_hints = Quotes.objects.get(id=args['id'])
-        add_hints.add_hint(args['new_hint'])
-        return {'Quote': add_hints.json_response_answerless()}
+        quote_hints = Quotes.objects.get(id=args['id'])
+        quote_hints.add_hint(args['new_hint'])
+        return {'Quote': quote_hints.json_response_answerless()}
     else:
         return{'error': 'Unable to add hint, please try again.'}
     
@@ -93,10 +93,13 @@ def increase_likes(args):
     else:
         return {'error': 'Unable to like, please try again' }
 #Route to find all categories
-@route_get(BASE_URL + 'categories')
+@route_get(BASE_URL + 'categories', args={'category':str})
 def all_categories(args):
-    category_list = ['Sports','Lyrics','Movies', 'Influential figures']
-    return {'categories':category_list}
+    category_list = []
+    for all_categories in Quotes.objects.filter(answer__contains=args['category']):
+        category_list.append(all_categories.json_response_answerless())
+    
+    return {'quotes': category_list}
 
 #Route to find all quotes with specific category
 @route_get(BASE_URL + 'specific_category', args={'category':str})
